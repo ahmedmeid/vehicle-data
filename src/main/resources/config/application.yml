@@ -43,7 +43,7 @@ management:
           ['configprops', 'env', 'health', 'info', 'jhimetrics', 'jhiopenapigroups', 'logfile', 'loggers', 'prometheus', 'threaddump']
   endpoint:
     health:
-      show-details: when_authorized
+      show-details: WHEN_AUTHORIZED
       roles: 'ROLE_ADMIN'
       probes:
         enabled: true
@@ -104,7 +104,7 @@ spring:
         binder:
           replicationFactor: 1
           auto-create-topics: true
-          brokers: localhost:9092
+          brokers: ${KAFKA_BROKER_URI}
       bindings:
         binding-in-sse:
           destination: sse-topic
@@ -152,7 +152,7 @@ spring:
       client:
         provider:
           oidc:
-            issuer-uri: http://localhost:9080/realms/jhipster
+            issuer-uri: ${OAUTH2_ISSUER_URI}
         registration:
           oidc:
             client-id: internal
@@ -209,6 +209,19 @@ jhipster:
       audience:
         - account
         - api://default
+
+fiware:
+  orion:
+    server-uri: ${ORION_URL}
+  iot-agent:
+    server-uri: ${IOT_AGENT_URL}
+  notification-service:
+    url: ${NOTIFICATION_SERVICE_URL}
+
+logging:
+  level:
+    '[org.apache.http]': INFO
+    '[httpclient.wire]': INFO
 # ===================================================================
 # Application specific properties
 # Add your own application properties here, see the ApplicationProperties class
