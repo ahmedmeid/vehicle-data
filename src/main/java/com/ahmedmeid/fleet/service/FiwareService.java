@@ -1,6 +1,5 @@
 package com.ahmedmeid.fleet.service;
 
-import com.ahmedmeid.fleet.config.KafkaSseConsumer;
 import com.ahmedmeid.fleet.service.dto.Attribute;
 import com.ahmedmeid.fleet.service.dto.Condition;
 import com.ahmedmeid.fleet.service.dto.CreateEntity;
@@ -20,10 +19,11 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Consumer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cloud.stream.annotation.StreamListener;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -50,16 +50,17 @@ public class FiwareService {
         this.restTemplate = restTemplate;
     }
 
-    //TODO: replace deprecated API calls to functional model
-    @StreamListener(value = KafkaSseConsumer.CHANNELNAME, copyHeaders = "false")
-    public void consumeVehicleCreatedEventMessage(Message<VehicleDTO> message) {
-        VehicleDTO vehicle = message.getPayload();
-        try {
-            createEntityOnOrion(vehicle);
-            provisionDeviceOnIoTAgent(vehicle);
-        } catch (Exception ex) {
-            log.error(ex.getMessage(), ex);
-        }
+    @Bean
+    Consumer<Message<VehicleDTO>> consumer() {
+        return message -> {
+            VehicleDTO vehicle = message.getPayload();
+            try {
+                createEntityOnOrion(vehicle);
+                provisionDeviceOnIoTAgent(vehicle);
+            } catch (Exception ex) {
+                log.error(ex.getMessage(), ex);
+            }
+        };
     }
 
     /**

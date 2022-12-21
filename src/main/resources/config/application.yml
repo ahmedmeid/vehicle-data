@@ -99,6 +99,8 @@ spring:
       config:
         watch:
           enabled: false
+    function:
+      definition: consumer
     stream:
       kafka:
         binder:
@@ -106,13 +108,9 @@ spring:
           auto-create-topics: true
           brokers: ${KAFKA_BROKER_URI}
       bindings:
-        binding-in-sse:
-          destination: sse-topic
-          content-type: text/plain
-          group: vehicle-data
-        binding-out-sse:
-          destination: sse-topic
-          content-type: text/plain
+        consumer-in-0:
+          destination: vehicle-created-topic
+          content-type: application/json
           group: vehicle-data
   profiles:
     # The commented value for `active` can be replaced with valid Spring profiles to load.

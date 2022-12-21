@@ -3,7 +3,6 @@ package com.ahmedmeid.fleet.config;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -14,7 +13,6 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.reactive.CorsWebFilter;
 import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
 import org.springframework.web.reactive.config.WebFluxConfigurer;
-import org.springframework.web.reactive.result.method.HandlerMethodArgumentResolver;
 import org.springframework.web.server.WebExceptionHandler;
 import org.zalando.problem.spring.webflux.advice.ProblemExceptionHandler;
 import org.zalando.problem.spring.webflux.advice.ProblemHandling;
@@ -23,7 +21,6 @@ import tech.jhipster.config.JHipsterProperties;
 /**
  * Configuration of web application with Servlet 3.0 APIs.
  */
-@EnableBinding({ KafkaSseConsumer.class, KafkaSseProducer.class })
 @Configuration
 public class WebConfigurer implements WebFluxConfigurer {
 
