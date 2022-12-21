@@ -76,6 +76,7 @@
         <sonar-maven-plugin.version>3.9.1.2184</sonar-maven-plugin.version>
 
         <!-- jhipster-needle-maven-property -->
+        <lombok.version>1.18.24</lombok.version>
     </properties>
 
     <dependencyManagement>
@@ -306,6 +307,15 @@
             <artifactId>metrics-core</artifactId>
         </dependency>
         <!-- jhipster-needle-maven-add-dependency -->
+        <dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+		</dependency>
+		<dependency>
+    		<groupId>org.apache.httpcomponents</groupId>
+    		<artifactId>httpclient</artifactId>
+   			 <version>4.5.14</version>
+		</dependency>
     </dependencies>
 
     <build>
@@ -424,6 +434,11 @@
                                 <version>${mapstruct.version}</version>
                             </path>
                             <!-- jhipster-needle-maven-add-annotation-processor -->
+                            <path>
+       							 <groupId>org.projectlombok</groupId>     
+       							 <artifactId>lombok</artifactId>
+        						 <version>${lombok.version}</version>
+      						</path>
                         </annotationProcessorPaths>
                     </configuration>
                 </plugin>
