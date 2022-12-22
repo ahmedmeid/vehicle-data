@@ -1,4 +1,4 @@
-package com.ahmedmeid.fleet.service.dto;
+package com.ahmedmeid.fleet.dto;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
@@ -11,39 +11,21 @@ import java.util.Map;
 import javax.annotation.processing.Generated;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({ "id", "type", "vin", "regNo" })
+@JsonPropertyOrder({ "type", "value", "metadata" })
 @Generated("jsonschema2pojo")
-public class CreateEntity {
-
-    @JsonProperty("id")
-    private String id;
+public class RefVehicle {
 
     @JsonProperty("type")
     private String type;
 
-    @JsonProperty("vin")
-    private Vin vin;
+    @JsonProperty("value")
+    private String value;
 
-    @JsonProperty("regNo")
-    private RegNo regNo;
+    @JsonProperty("metadata")
+    private Metadata metadata;
 
     @JsonIgnore
     private Map<String, Object> additionalProperties = new LinkedHashMap<String, Object>();
-
-    @JsonProperty("id")
-    public String getId() {
-        return id;
-    }
-
-    @JsonProperty("id")
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public CreateEntity withId(String id) {
-        this.id = id;
-        return this;
-    }
 
     @JsonProperty("type")
     public String getType() {
@@ -55,38 +37,38 @@ public class CreateEntity {
         this.type = type;
     }
 
-    public CreateEntity withType(String type) {
+    public RefVehicle withType(String type) {
         this.type = type;
         return this;
     }
 
-    @JsonProperty("vin")
-    public Vin getVin() {
-        return vin;
+    @JsonProperty("value")
+    public String getValue() {
+        return value;
     }
 
-    @JsonProperty("vin")
-    public void setVin(Vin vin) {
-        this.vin = vin;
+    @JsonProperty("value")
+    public void setValue(String value) {
+        this.value = value;
     }
 
-    public CreateEntity withVin(Vin vin) {
-        this.vin = vin;
+    public RefVehicle withValue(String value) {
+        this.value = value;
         return this;
     }
 
-    @JsonProperty("regNo")
-    public RegNo getRegNo() {
-        return regNo;
+    @JsonProperty("metadata")
+    public Metadata getMetadata() {
+        return metadata;
     }
 
-    @JsonProperty("regNo")
-    public void setRegNo(RegNo regNo) {
-        this.regNo = regNo;
+    @JsonProperty("metadata")
+    public void setMetadata(Metadata metadata) {
+        this.metadata = metadata;
     }
 
-    public CreateEntity withRegNo(RegNo regNo) {
-        this.regNo = regNo;
+    public RefVehicle withMetadata(Metadata metadata) {
+        this.metadata = metadata;
         return this;
     }
 
@@ -100,7 +82,7 @@ public class CreateEntity {
         this.additionalProperties.put(name, value);
     }
 
-    public CreateEntity withAdditionalProperty(String name, Object value) {
+    public RefVehicle withAdditionalProperty(String name, Object value) {
         this.additionalProperties.put(name, value);
         return this;
     }
@@ -108,22 +90,18 @@ public class CreateEntity {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append(CreateEntity.class.getName()).append('@').append(Integer.toHexString(System.identityHashCode(this))).append('[');
-        sb.append("id");
-        sb.append('=');
-        sb.append(((this.id == null) ? "<null>" : this.id));
-        sb.append(',');
+        sb.append(RefVehicle.class.getName()).append('@').append(Integer.toHexString(System.identityHashCode(this))).append('[');
         sb.append("type");
         sb.append('=');
         sb.append(((this.type == null) ? "<null>" : this.type));
         sb.append(',');
-        sb.append("vin");
+        sb.append("value");
         sb.append('=');
-        sb.append(((this.vin == null) ? "<null>" : this.vin));
+        sb.append(((this.value == null) ? "<null>" : this.value));
         sb.append(',');
-        sb.append("regNo");
+        sb.append("metadata");
         sb.append('=');
-        sb.append(((this.regNo == null) ? "<null>" : this.regNo));
+        sb.append(((this.metadata == null) ? "<null>" : this.metadata));
         sb.append(',');
         sb.append("additionalProperties");
         sb.append('=');
@@ -140,11 +118,10 @@ public class CreateEntity {
     @Override
     public int hashCode() {
         int result = 1;
-        result = ((result * 31) + ((this.regNo == null) ? 0 : this.regNo.hashCode()));
-        result = ((result * 31) + ((this.vin == null) ? 0 : this.vin.hashCode()));
-        result = ((result * 31) + ((this.id == null) ? 0 : this.id.hashCode()));
+        result = ((result * 31) + ((this.metadata == null) ? 0 : this.metadata.hashCode()));
         result = ((result * 31) + ((this.additionalProperties == null) ? 0 : this.additionalProperties.hashCode()));
         result = ((result * 31) + ((this.type == null) ? 0 : this.type.hashCode()));
+        result = ((result * 31) + ((this.value == null) ? 0 : this.value.hashCode()));
         return result;
     }
 
@@ -153,25 +130,22 @@ public class CreateEntity {
         if (other == this) {
             return true;
         }
-        if ((other instanceof CreateEntity) == false) {
+        if ((other instanceof RefVehicle) == false) {
             return false;
         }
-        CreateEntity rhs = ((CreateEntity) other);
+        RefVehicle rhs = ((RefVehicle) other);
         return (
             (
                 (
+                    ((this.metadata == rhs.metadata) || ((this.metadata != null) && this.metadata.equals(rhs.metadata))) &&
                     (
-                        ((this.regNo == rhs.regNo) || ((this.regNo != null) && this.regNo.equals(rhs.regNo))) &&
-                        ((this.vin == rhs.vin) || ((this.vin != null) && this.vin.equals(rhs.vin)))
-                    ) &&
-                    ((this.id == rhs.id) || ((this.id != null) && this.id.equals(rhs.id)))
+                        (this.additionalProperties == rhs.additionalProperties) ||
+                        ((this.additionalProperties != null) && this.additionalProperties.equals(rhs.additionalProperties))
+                    )
                 ) &&
-                (
-                    (this.additionalProperties == rhs.additionalProperties) ||
-                    ((this.additionalProperties != null) && this.additionalProperties.equals(rhs.additionalProperties))
-                )
+                ((this.type == rhs.type) || ((this.type != null) && this.type.equals(rhs.type)))
             ) &&
-            ((this.type == rhs.type) || ((this.type != null) && this.type.equals(rhs.type)))
+            ((this.value == rhs.value) || ((this.value != null) && this.value.equals(rhs.value)))
         );
     }
 }

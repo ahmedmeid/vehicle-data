@@ -1,5 +1,6 @@
-package com.ahmedmeid.fleet.service.dto;
+package com.ahmedmeid.fleet.service.dto.device;
 
+import com.ahmedmeid.fleet.service.dto.entity.Attribute;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;

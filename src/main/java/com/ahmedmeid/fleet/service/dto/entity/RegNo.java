@@ -1,4 +1,4 @@
-package com.ahmedmeid.fleet.service.dto;
+package com.ahmedmeid.fleet.service.dto.entity;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
@@ -6,35 +6,51 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 import javax.annotation.processing.Generated;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({ "devices" })
+@JsonPropertyOrder({ "type", "value" })
 @Generated("jsonschema2pojo")
-public class ProvisionDevice {
+public class RegNo {
 
-    @JsonProperty("devices")
-    private List<Device> devices = new ArrayList<Device>();
+    @JsonProperty("type")
+    private String type;
+
+    @JsonProperty("value")
+    private String value;
 
     @JsonIgnore
     private Map<String, Object> additionalProperties = new LinkedHashMap<String, Object>();
 
-    @JsonProperty("devices")
-    public List<Device> getDevices() {
-        return devices;
+    @JsonProperty("type")
+    public String getType() {
+        return type;
     }
 
-    @JsonProperty("devices")
-    public void setDevices(List<Device> devices) {
-        this.devices = devices;
+    @JsonProperty("type")
+    public void setType(String type) {
+        this.type = type;
     }
 
-    public ProvisionDevice withDevices(List<Device> devices) {
-        this.devices = devices;
+    public RegNo withType(String type) {
+        this.type = type;
+        return this;
+    }
+
+    @JsonProperty("value")
+    public String getValue() {
+        return value;
+    }
+
+    @JsonProperty("value")
+    public void setValue(String value) {
+        this.value = value;
+    }
+
+    public RegNo withValue(String value) {
+        this.value = value;
         return this;
     }
 
@@ -48,7 +64,7 @@ public class ProvisionDevice {
         this.additionalProperties.put(name, value);
     }
 
-    public ProvisionDevice withAdditionalProperty(String name, Object value) {
+    public RegNo withAdditionalProperty(String name, Object value) {
         this.additionalProperties.put(name, value);
         return this;
     }
@@ -56,10 +72,14 @@ public class ProvisionDevice {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append(ProvisionDevice.class.getName()).append('@').append(Integer.toHexString(System.identityHashCode(this))).append('[');
-        sb.append("devices");
+        sb.append(RegNo.class.getName()).append('@').append(Integer.toHexString(System.identityHashCode(this))).append('[');
+        sb.append("type");
         sb.append('=');
-        sb.append(((this.devices == null) ? "<null>" : this.devices));
+        sb.append(((this.type == null) ? "<null>" : this.type));
+        sb.append(',');
+        sb.append("value");
+        sb.append('=');
+        sb.append(((this.value == null) ? "<null>" : this.value));
         sb.append(',');
         sb.append("additionalProperties");
         sb.append('=');
@@ -76,8 +96,9 @@ public class ProvisionDevice {
     @Override
     public int hashCode() {
         int result = 1;
-        result = ((result * 31) + ((this.devices == null) ? 0 : this.devices.hashCode()));
         result = ((result * 31) + ((this.additionalProperties == null) ? 0 : this.additionalProperties.hashCode()));
+        result = ((result * 31) + ((this.type == null) ? 0 : this.type.hashCode()));
+        result = ((result * 31) + ((this.value == null) ? 0 : this.value.hashCode()));
         return result;
     }
 
@@ -86,16 +107,19 @@ public class ProvisionDevice {
         if (other == this) {
             return true;
         }
-        if ((other instanceof ProvisionDevice) == false) {
+        if ((other instanceof RegNo) == false) {
             return false;
         }
-        ProvisionDevice rhs = ((ProvisionDevice) other);
+        RegNo rhs = ((RegNo) other);
         return (
-            ((this.devices == rhs.devices) || ((this.devices != null) && this.devices.equals(rhs.devices))) &&
             (
-                (this.additionalProperties == rhs.additionalProperties) ||
-                ((this.additionalProperties != null) && this.additionalProperties.equals(rhs.additionalProperties))
-            )
+                (
+                    (this.additionalProperties == rhs.additionalProperties) ||
+                    ((this.additionalProperties != null) && this.additionalProperties.equals(rhs.additionalProperties))
+                ) &&
+                ((this.type == rhs.type) || ((this.type != null) && this.type.equals(rhs.type)))
+            ) &&
+            ((this.value == rhs.value) || ((this.value != null) && this.value.equals(rhs.value)))
         );
     }
 }

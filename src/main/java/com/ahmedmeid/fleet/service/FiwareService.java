@@ -1,34 +1,33 @@
 package com.ahmedmeid.fleet.service;
 
-import com.ahmedmeid.fleet.service.dto.Attribute;
-import com.ahmedmeid.fleet.service.dto.Condition;
-import com.ahmedmeid.fleet.service.dto.CreateEntity;
-import com.ahmedmeid.fleet.service.dto.Device;
-import com.ahmedmeid.fleet.service.dto.Entity;
-import com.ahmedmeid.fleet.service.dto.Http;
-import com.ahmedmeid.fleet.service.dto.Notification;
-import com.ahmedmeid.fleet.service.dto.ProvisionDevice;
-import com.ahmedmeid.fleet.service.dto.RegNo;
-import com.ahmedmeid.fleet.service.dto.StaticAttribute;
-import com.ahmedmeid.fleet.service.dto.Subject;
-import com.ahmedmeid.fleet.service.dto.SubscribeToChanges;
+import com.ahmedmeid.fleet.service.dto.TokenEntity;
 import com.ahmedmeid.fleet.service.dto.VehicleDTO;
-import com.ahmedmeid.fleet.service.dto.Vin;
+import com.ahmedmeid.fleet.service.dto.device.Device;
+import com.ahmedmeid.fleet.service.dto.device.ProvisionDevice;
+import com.ahmedmeid.fleet.service.dto.device.StaticAttribute;
+import com.ahmedmeid.fleet.service.dto.entity.Attribute;
+import com.ahmedmeid.fleet.service.dto.entity.CreateEntity;
+import com.ahmedmeid.fleet.service.dto.entity.RegNo;
+import com.ahmedmeid.fleet.service.dto.entity.Vin;
+import com.ahmedmeid.fleet.service.dto.servicegroup.ServiceGroup;
+import com.ahmedmeid.fleet.service.dto.subscription.*;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
 import java.util.function.Consumer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
+import org.springframework.http.*;
 import org.springframework.messaging.Message;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 @Service
@@ -45,6 +44,17 @@ public class FiwareService {
 
     @Value("${fiware.notification-service.url}")
     private String notificationServiceURL;
+
+    @Value("${fiware.orion.client-id}")
+    private String orionClientId;
+
+    @Value("${fiware.orion.client-secret}")
+    private String orionClientSecret;
+
+    @Value("${keycloak.token-service.url}")
+    private String keycloakTokenServiceURL;
+
+    public static String GRANT_TYPE = "client_credentials";
 
     public FiwareService(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
@@ -126,7 +136,7 @@ public class FiwareService {
      * Subscribe to changes of state for the IoT Device Entity
      * @throws URISyntaxException
      */
-    public void subscribeIoTDeviceChanges() throws URISyntaxException {
+    public void subscribeIoTDeviceChanges(String token) throws URISyntaxException {
         log.debug("subscribing to changes in the entities of IoTDevice");
 
         Entity entity = new Entity().withIdPattern(".*").withType("IoTDevice");
@@ -134,14 +144,51 @@ public class FiwareService {
         entities.add(entity);
         Condition condition = new Condition().withAttrs(Arrays.asList("location"));
         Subject subject = new Subject().withEntities(entities).withCondition(condition);
-        Http http = new Http().withUrl(notificationServiceURL);
-        Notification notification = new Notification().withHttp(http);
+
+        Headers headers = new Headers().withContentType("application/json").withAuthorization("Bearer " + token);
+        HttpCustom httpCustom = new HttpCustom().withUrl(notificationServiceURL).withHeaders(headers);
+        Notification notification = new Notification().withHttpCustom(httpCustom);
+        Calendar time = Calendar.getInstance();
+        time.add(Calendar.MINUTE, 5);
+        String expires = new SimpleDateFormat("yyy-MM-dd'T'hh:mm:ss'Z'").format(time.getTime());
         SubscribeToChanges dto = new SubscribeToChanges()
             .withDescription("Notify me of all IoTDevice state changes")
             .withSubject(subject)
-            .withNotification(notification);
+            .withNotification(notification)
+            .withExpires(expires);
 
         URI uri = new URI(OrionURL + "/v2/subscriptions");
         restTemplate.postForEntity(uri, dto, SubscribeToChanges.class);
+    }
+
+    private String authenticateForOrion() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+
+        MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
+        map.add("client_id", orionClientId);
+        map.add("client_secret", orionClientSecret);
+        map.add("grant_type", GRANT_TYPE);
+
+        HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<>(map, headers);
+
+        ResponseEntity<TokenEntity> response = restTemplate.postForEntity(keycloakTokenServiceURL, entity, TokenEntity.class);
+        return response.getBody().getAccessToken();
+    }
+
+    private void provisionServiceGroup(String apiKey) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.set("fiware-service", "openiot");
+        headers.set("fiware-servicepath", "/");
+        com.ahmedmeid.fleet.service.dto.servicegroup.Service service = new com.ahmedmeid.fleet.service.dto.servicegroup.Service()
+            .withApikey(apiKey)
+            .withCbroker("http://orion:1026")
+            .withEntityType("Thing")
+            .withResource("");
+        List<com.ahmedmeid.fleet.service.dto.servicegroup.Service> services = new ArrayList<>();
+        services.add(service);
+        ServiceGroup serviceGroup = new ServiceGroup().withServices(services);
+        restTemplate.postForEntity(IotAgentURL + "/iot/services", service, com.ahmedmeid.fleet.service.dto.servicegroup.Service.class);
     }
 }

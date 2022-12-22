@@ -1,4 +1,4 @@
-package com.ahmedmeid.fleet.service.dto;
+package com.ahmedmeid.fleet.dto;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
@@ -6,51 +6,53 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import javax.annotation.processing.Generated;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({ "type", "value" })
+@JsonPropertyOrder({ "subscriptionId", "data" })
 @Generated("jsonschema2pojo")
-public class RegNo {
+public class Notification {
 
-    @JsonProperty("type")
-    private String type;
+    @JsonProperty("subscriptionId")
+    private String subscriptionId;
 
-    @JsonProperty("value")
-    private String value;
+    @JsonProperty("data")
+    private List<Datum> data = new ArrayList<Datum>();
 
     @JsonIgnore
     private Map<String, Object> additionalProperties = new LinkedHashMap<String, Object>();
 
-    @JsonProperty("type")
-    public String getType() {
-        return type;
+    @JsonProperty("subscriptionId")
+    public String getSubscriptionId() {
+        return subscriptionId;
     }
 
-    @JsonProperty("type")
-    public void setType(String type) {
-        this.type = type;
+    @JsonProperty("subscriptionId")
+    public void setSubscriptionId(String subscriptionId) {
+        this.subscriptionId = subscriptionId;
     }
 
-    public RegNo withType(String type) {
-        this.type = type;
+    public Notification withSubscriptionId(String subscriptionId) {
+        this.subscriptionId = subscriptionId;
         return this;
     }
 
-    @JsonProperty("value")
-    public String getValue() {
-        return value;
+    @JsonProperty("data")
+    public List<Datum> getData() {
+        return data;
     }
 
-    @JsonProperty("value")
-    public void setValue(String value) {
-        this.value = value;
+    @JsonProperty("data")
+    public void setData(List<Datum> data) {
+        this.data = data;
     }
 
-    public RegNo withValue(String value) {
-        this.value = value;
+    public Notification withData(List<Datum> data) {
+        this.data = data;
         return this;
     }
 
@@ -64,7 +66,7 @@ public class RegNo {
         this.additionalProperties.put(name, value);
     }
 
-    public RegNo withAdditionalProperty(String name, Object value) {
+    public Notification withAdditionalProperty(String name, Object value) {
         this.additionalProperties.put(name, value);
         return this;
     }
@@ -72,14 +74,14 @@ public class RegNo {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append(RegNo.class.getName()).append('@').append(Integer.toHexString(System.identityHashCode(this))).append('[');
-        sb.append("type");
+        sb.append(Notification.class.getName()).append('@').append(Integer.toHexString(System.identityHashCode(this))).append('[');
+        sb.append("subscriptionId");
         sb.append('=');
-        sb.append(((this.type == null) ? "<null>" : this.type));
+        sb.append(((this.subscriptionId == null) ? "<null>" : this.subscriptionId));
         sb.append(',');
-        sb.append("value");
+        sb.append("data");
         sb.append('=');
-        sb.append(((this.value == null) ? "<null>" : this.value));
+        sb.append(((this.data == null) ? "<null>" : this.data));
         sb.append(',');
         sb.append("additionalProperties");
         sb.append('=');
@@ -97,8 +99,8 @@ public class RegNo {
     public int hashCode() {
         int result = 1;
         result = ((result * 31) + ((this.additionalProperties == null) ? 0 : this.additionalProperties.hashCode()));
-        result = ((result * 31) + ((this.type == null) ? 0 : this.type.hashCode()));
-        result = ((result * 31) + ((this.value == null) ? 0 : this.value.hashCode()));
+        result = ((result * 31) + ((this.subscriptionId == null) ? 0 : this.subscriptionId.hashCode()));
+        result = ((result * 31) + ((this.data == null) ? 0 : this.data.hashCode()));
         return result;
     }
 
@@ -107,19 +109,22 @@ public class RegNo {
         if (other == this) {
             return true;
         }
-        if ((other instanceof RegNo) == false) {
+        if ((other instanceof Notification) == false) {
             return false;
         }
-        RegNo rhs = ((RegNo) other);
+        Notification rhs = ((Notification) other);
         return (
             (
                 (
                     (this.additionalProperties == rhs.additionalProperties) ||
                     ((this.additionalProperties != null) && this.additionalProperties.equals(rhs.additionalProperties))
                 ) &&
-                ((this.type == rhs.type) || ((this.type != null) && this.type.equals(rhs.type)))
+                (
+                    (this.subscriptionId == rhs.subscriptionId) ||
+                    ((this.subscriptionId != null) && this.subscriptionId.equals(rhs.subscriptionId))
+                )
             ) &&
-            ((this.value == rhs.value) || ((this.value != null) && this.value.equals(rhs.value)))
+            ((this.data == rhs.data) || ((this.data != null) && this.data.equals(rhs.data)))
         );
     }
 }

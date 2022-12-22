@@ -1,4 +1,4 @@
-package com.ahmedmeid.fleet.service.dto;
+package com.ahmedmeid.fleet.service.dto.subscription;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
@@ -11,7 +11,7 @@ import java.util.Map;
 import javax.annotation.processing.Generated;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({ "description", "subject", "notification" })
+@JsonPropertyOrder({ "description", "subject", "notification", "expires" })
 @Generated("jsonschema2pojo")
 public class SubscribeToChanges {
 
@@ -23,6 +23,9 @@ public class SubscribeToChanges {
 
     @JsonProperty("notification")
     private Notification notification;
+
+    @JsonProperty("expires")
+    private String expires;
 
     @JsonIgnore
     private Map<String, Object> additionalProperties = new LinkedHashMap<String, Object>();
@@ -72,6 +75,21 @@ public class SubscribeToChanges {
         return this;
     }
 
+    @JsonProperty("expires")
+    public String getExpires() {
+        return expires;
+    }
+
+    @JsonProperty("expires")
+    public void setExpires(String expires) {
+        this.expires = expires;
+    }
+
+    public SubscribeToChanges withExpires(String expires) {
+        this.expires = expires;
+        return this;
+    }
+
     @JsonAnyGetter
     public Map<String, Object> getAdditionalProperties() {
         return this.additionalProperties;
@@ -103,6 +121,10 @@ public class SubscribeToChanges {
         sb.append('=');
         sb.append(((this.notification == null) ? "<null>" : this.notification));
         sb.append(',');
+        sb.append("expires");
+        sb.append('=');
+        sb.append(((this.expires == null) ? "<null>" : this.expires));
+        sb.append(',');
         sb.append("additionalProperties");
         sb.append('=');
         sb.append(((this.additionalProperties == null) ? "<null>" : this.additionalProperties));
@@ -120,6 +142,7 @@ public class SubscribeToChanges {
         int result = 1;
         result = ((result * 31) + ((this.description == null) ? 0 : this.description.hashCode()));
         result = ((result * 31) + ((this.notification == null) ? 0 : this.notification.hashCode()));
+        result = ((result * 31) + ((this.expires == null) ? 0 : this.expires.hashCode()));
         result = ((result * 31) + ((this.additionalProperties == null) ? 0 : this.additionalProperties.hashCode()));
         result = ((result * 31) + ((this.subject == null) ? 0 : this.subject.hashCode()));
         return result;
@@ -137,8 +160,17 @@ public class SubscribeToChanges {
         return (
             (
                 (
-                    ((this.description == rhs.description) || ((this.description != null) && this.description.equals(rhs.description))) &&
-                    ((this.notification == rhs.notification) || ((this.notification != null) && this.notification.equals(rhs.notification)))
+                    (
+                        (
+                            (this.description == rhs.description) ||
+                            ((this.description != null) && this.description.equals(rhs.description))
+                        ) &&
+                        (
+                            (this.notification == rhs.notification) ||
+                            ((this.notification != null) && this.notification.equals(rhs.notification))
+                        )
+                    ) &&
+                    ((this.expires == rhs.expires) || ((this.expires != null) && this.expires.equals(rhs.expires)))
                 ) &&
                 (
                     (this.additionalProperties == rhs.additionalProperties) ||

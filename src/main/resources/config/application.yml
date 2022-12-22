@@ -211,10 +211,16 @@ jhipster:
 fiware:
   orion:
     server-uri: ${ORION_URL}
+    client-id: ${ORION_CLIENT_ID}
+    client-secret: ${ORION_CLIENT_SECRET}
   iot-agent:
     server-uri: ${IOT_AGENT_URL}
   notification-service:
     url: ${NOTIFICATION_SERVICE_URL}
+
+keycloak:
+  token-service:
+    url: ${KEYCLOAK_TOKEN_SERVICE}
 
 logging:
   level:

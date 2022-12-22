@@ -1,4 +1,4 @@
-package com.ahmedmeid.fleet.service.dto;
+package com.ahmedmeid.fleet.service.dto.servicegroup;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
@@ -6,33 +6,35 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import javax.annotation.processing.Generated;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({ "url" })
+@JsonPropertyOrder({ "services" })
 @Generated("jsonschema2pojo")
-public class Http {
+public class ServiceGroup {
 
-    @JsonProperty("url")
-    private String url;
+    @JsonProperty("services")
+    private List<Service> services = new ArrayList<Service>();
 
     @JsonIgnore
     private Map<String, Object> additionalProperties = new LinkedHashMap<String, Object>();
 
-    @JsonProperty("url")
-    public String getUrl() {
-        return url;
+    @JsonProperty("services")
+    public List<Service> getServices() {
+        return services;
     }
 
-    @JsonProperty("url")
-    public void setUrl(String url) {
-        this.url = url;
+    @JsonProperty("services")
+    public void setServices(List<Service> services) {
+        this.services = services;
     }
 
-    public Http withUrl(String url) {
-        this.url = url;
+    public ServiceGroup withServices(List<Service> services) {
+        this.services = services;
         return this;
     }
 
@@ -46,7 +48,7 @@ public class Http {
         this.additionalProperties.put(name, value);
     }
 
-    public Http withAdditionalProperty(String name, Object value) {
+    public ServiceGroup withAdditionalProperty(String name, Object value) {
         this.additionalProperties.put(name, value);
         return this;
     }
@@ -54,10 +56,10 @@ public class Http {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append(Http.class.getName()).append('@').append(Integer.toHexString(System.identityHashCode(this))).append('[');
-        sb.append("url");
+        sb.append(ServiceGroup.class.getName()).append('@').append(Integer.toHexString(System.identityHashCode(this))).append('[');
+        sb.append("services");
         sb.append('=');
-        sb.append(((this.url == null) ? "<null>" : this.url));
+        sb.append(((this.services == null) ? "<null>" : this.services));
         sb.append(',');
         sb.append("additionalProperties");
         sb.append('=');
@@ -74,7 +76,7 @@ public class Http {
     @Override
     public int hashCode() {
         int result = 1;
-        result = ((result * 31) + ((this.url == null) ? 0 : this.url.hashCode()));
+        result = ((result * 31) + ((this.services == null) ? 0 : this.services.hashCode()));
         result = ((result * 31) + ((this.additionalProperties == null) ? 0 : this.additionalProperties.hashCode()));
         return result;
     }
@@ -84,12 +86,12 @@ public class Http {
         if (other == this) {
             return true;
         }
-        if ((other instanceof Http) == false) {
+        if ((other instanceof ServiceGroup) == false) {
             return false;
         }
-        Http rhs = ((Http) other);
+        ServiceGroup rhs = ((ServiceGroup) other);
         return (
-            ((this.url == rhs.url) || ((this.url != null) && this.url.equals(rhs.url))) &&
+            ((this.services == rhs.services) || ((this.services != null) && this.services.equals(rhs.services))) &&
             (
                 (this.additionalProperties == rhs.additionalProperties) ||
                 ((this.additionalProperties != null) && this.additionalProperties.equals(rhs.additionalProperties))

@@ -1,4 +1,4 @@
-package com.ahmedmeid.fleet.service.dto;
+package com.ahmedmeid.fleet.service.dto.subscription;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
@@ -6,51 +6,53 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import javax.annotation.processing.Generated;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({ "idPattern", "type" })
+@JsonPropertyOrder({ "entities", "condition" })
 @Generated("jsonschema2pojo")
-public class Entity {
+public class Subject {
 
-    @JsonProperty("idPattern")
-    private String idPattern;
+    @JsonProperty("entities")
+    private List<Entity> entities = new ArrayList<Entity>();
 
-    @JsonProperty("type")
-    private String type;
+    @JsonProperty("condition")
+    private Condition condition;
 
     @JsonIgnore
     private Map<String, Object> additionalProperties = new LinkedHashMap<String, Object>();
 
-    @JsonProperty("idPattern")
-    public String getIdPattern() {
-        return idPattern;
+    @JsonProperty("entities")
+    public List<Entity> getEntities() {
+        return entities;
     }
 
-    @JsonProperty("idPattern")
-    public void setIdPattern(String idPattern) {
-        this.idPattern = idPattern;
+    @JsonProperty("entities")
+    public void setEntities(List<Entity> entities) {
+        this.entities = entities;
     }
 
-    public Entity withIdPattern(String idPattern) {
-        this.idPattern = idPattern;
+    public Subject withEntities(List<Entity> entities) {
+        this.entities = entities;
         return this;
     }
 
-    @JsonProperty("type")
-    public String getType() {
-        return type;
+    @JsonProperty("condition")
+    public Condition getCondition() {
+        return condition;
     }
 
-    @JsonProperty("type")
-    public void setType(String type) {
-        this.type = type;
+    @JsonProperty("condition")
+    public void setCondition(Condition condition) {
+        this.condition = condition;
     }
 
-    public Entity withType(String type) {
-        this.type = type;
+    public Subject withCondition(Condition condition) {
+        this.condition = condition;
         return this;
     }
 
@@ -64,7 +66,7 @@ public class Entity {
         this.additionalProperties.put(name, value);
     }
 
-    public Entity withAdditionalProperty(String name, Object value) {
+    public Subject withAdditionalProperty(String name, Object value) {
         this.additionalProperties.put(name, value);
         return this;
     }
@@ -72,14 +74,14 @@ public class Entity {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append(Entity.class.getName()).append('@').append(Integer.toHexString(System.identityHashCode(this))).append('[');
-        sb.append("idPattern");
+        sb.append(Subject.class.getName()).append('@').append(Integer.toHexString(System.identityHashCode(this))).append('[');
+        sb.append("entities");
         sb.append('=');
-        sb.append(((this.idPattern == null) ? "<null>" : this.idPattern));
+        sb.append(((this.entities == null) ? "<null>" : this.entities));
         sb.append(',');
-        sb.append("type");
+        sb.append("condition");
         sb.append('=');
-        sb.append(((this.type == null) ? "<null>" : this.type));
+        sb.append(((this.condition == null) ? "<null>" : this.condition));
         sb.append(',');
         sb.append("additionalProperties");
         sb.append('=');
@@ -96,9 +98,9 @@ public class Entity {
     @Override
     public int hashCode() {
         int result = 1;
+        result = ((result * 31) + ((this.condition == null) ? 0 : this.condition.hashCode()));
         result = ((result * 31) + ((this.additionalProperties == null) ? 0 : this.additionalProperties.hashCode()));
-        result = ((result * 31) + ((this.type == null) ? 0 : this.type.hashCode()));
-        result = ((result * 31) + ((this.idPattern == null) ? 0 : this.idPattern.hashCode()));
+        result = ((result * 31) + ((this.entities == null) ? 0 : this.entities.hashCode()));
         return result;
     }
 
@@ -107,19 +109,19 @@ public class Entity {
         if (other == this) {
             return true;
         }
-        if ((other instanceof Entity) == false) {
+        if ((other instanceof Subject) == false) {
             return false;
         }
-        Entity rhs = ((Entity) other);
+        Subject rhs = ((Subject) other);
         return (
             (
+                ((this.condition == rhs.condition) || ((this.condition != null) && this.condition.equals(rhs.condition))) &&
                 (
                     (this.additionalProperties == rhs.additionalProperties) ||
                     ((this.additionalProperties != null) && this.additionalProperties.equals(rhs.additionalProperties))
-                ) &&
-                ((this.type == rhs.type) || ((this.type != null) && this.type.equals(rhs.type)))
+                )
             ) &&
-            ((this.idPattern == rhs.idPattern) || ((this.idPattern != null) && this.idPattern.equals(rhs.idPattern)))
+            ((this.entities == rhs.entities) || ((this.entities != null) && this.entities.equals(rhs.entities)))
         );
     }
 }

@@ -1,4 +1,4 @@
-package com.ahmedmeid.fleet.service.dto;
+package com.ahmedmeid.fleet.service.dto.subscription;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
@@ -6,33 +6,35 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import javax.annotation.processing.Generated;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({ "http" })
+@JsonPropertyOrder({ "attrs" })
 @Generated("jsonschema2pojo")
-public class Notification {
+public class Condition {
 
-    @JsonProperty("http")
-    private Http http;
+    @JsonProperty("attrs")
+    private List<String> attrs = new ArrayList<String>();
 
     @JsonIgnore
     private Map<String, Object> additionalProperties = new LinkedHashMap<String, Object>();
 
-    @JsonProperty("http")
-    public Http getHttp() {
-        return http;
+    @JsonProperty("attrs")
+    public List<String> getAttrs() {
+        return attrs;
     }
 
-    @JsonProperty("http")
-    public void setHttp(Http http) {
-        this.http = http;
+    @JsonProperty("attrs")
+    public void setAttrs(List<String> attrs) {
+        this.attrs = attrs;
     }
 
-    public Notification withHttp(Http http) {
-        this.http = http;
+    public Condition withAttrs(List<String> attrs) {
+        this.attrs = attrs;
         return this;
     }
 
@@ -46,7 +48,7 @@ public class Notification {
         this.additionalProperties.put(name, value);
     }
 
-    public Notification withAdditionalProperty(String name, Object value) {
+    public Condition withAdditionalProperty(String name, Object value) {
         this.additionalProperties.put(name, value);
         return this;
     }
@@ -54,10 +56,10 @@ public class Notification {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append(Notification.class.getName()).append('@').append(Integer.toHexString(System.identityHashCode(this))).append('[');
-        sb.append("http");
+        sb.append(Condition.class.getName()).append('@').append(Integer.toHexString(System.identityHashCode(this))).append('[');
+        sb.append("attrs");
         sb.append('=');
-        sb.append(((this.http == null) ? "<null>" : this.http));
+        sb.append(((this.attrs == null) ? "<null>" : this.attrs));
         sb.append(',');
         sb.append("additionalProperties");
         sb.append('=');
@@ -74,7 +76,7 @@ public class Notification {
     @Override
     public int hashCode() {
         int result = 1;
-        result = ((result * 31) + ((this.http == null) ? 0 : this.http.hashCode()));
+        result = ((result * 31) + ((this.attrs == null) ? 0 : this.attrs.hashCode()));
         result = ((result * 31) + ((this.additionalProperties == null) ? 0 : this.additionalProperties.hashCode()));
         return result;
     }
@@ -84,12 +86,12 @@ public class Notification {
         if (other == this) {
             return true;
         }
-        if ((other instanceof Notification) == false) {
+        if ((other instanceof Condition) == false) {
             return false;
         }
-        Notification rhs = ((Notification) other);
+        Condition rhs = ((Condition) other);
         return (
-            ((this.http == rhs.http) || ((this.http != null) && this.http.equals(rhs.http))) &&
+            ((this.attrs == rhs.attrs) || ((this.attrs != null) && this.attrs.equals(rhs.attrs))) &&
             (
                 (this.additionalProperties == rhs.additionalProperties) ||
                 ((this.additionalProperties != null) && this.additionalProperties.equals(rhs.additionalProperties))
