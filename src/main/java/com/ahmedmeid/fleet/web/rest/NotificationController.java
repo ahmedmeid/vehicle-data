@@ -1,19 +1,16 @@
 package com.ahmedmeid.fleet.web.rest;
 
 import com.ahmedmeid.fleet.dto.Notification;
+import com.ahmedmeid.fleet.service.FiwareService;
 import com.ahmedmeid.fleet.service.NotificationService;
+import java.net.URISyntaxException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.codec.ServerSentEvent;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -25,8 +22,18 @@ public class NotificationController {
 
     private final NotificationService notificationService;
 
-    public NotificationController(NotificationService notificationService) {
+    private final FiwareService fiwareService;
+
+    public NotificationController(NotificationService notificationService, FiwareService fiwareService) {
         this.notificationService = notificationService;
+        this.fiwareService = fiwareService;
+    }
+
+    @PostMapping("/subscribe")
+    @ResponseStatus(HttpStatus.CREATED)
+    public Mono<ResponseEntity<Void>> subscribe(@RequestParam(name = "deviceId") String deviceId) throws URISyntaxException {
+        fiwareService.subscribeIoTDeviceChanges(deviceId);
+        return Mono.just(ResponseEntity.noContent().build());
     }
 
     @PostMapping("/notification")

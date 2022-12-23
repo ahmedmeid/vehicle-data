@@ -13,11 +13,9 @@ import com.ahmedmeid.fleet.service.dto.servicegroup.ServiceGroup;
 import com.ahmedmeid.fleet.service.dto.subscription.*;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.List;
+import java.util.*;
 import java.util.function.Consumer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -98,10 +96,7 @@ public class FiwareService {
      */
     public void provisionDeviceOnIoTAgent(VehicleDTO vehicle) throws URISyntaxException {
         log.debug("provisioning of a device for the vehicle: " + vehicle + " in the IoT Agent");
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.set("fiware-service", "openiot");
-        headers.set("fiware-servicepath", "/");
+        HttpHeaders headers = getIoTServiceHeaders();
         URI uri = new URI(IotAgentURL + "/iot/devices");
         Attribute attr1 = new Attribute().withObjectId("f").withName("fuelLevel").withType("Inetger");
         Attribute attr2 = new Attribute().withObjectId("v").withName("speed").withType("Inetger");
@@ -136,10 +131,11 @@ public class FiwareService {
      * Subscribe to changes of state for the IoT Device Entity
      * @throws URISyntaxException
      */
-    public void subscribeIoTDeviceChanges(String token) throws URISyntaxException {
+    public void subscribeIoTDeviceChanges(String deviceId) throws URISyntaxException {
         log.debug("subscribing to changes in the entities of IoTDevice");
-
-        Entity entity = new Entity().withIdPattern(".*").withType("IoTDevice");
+        HttpHeaders requestHeaders = getIoTServiceHeaders();
+        String token = authenticateForOrion();
+        Entity entity = new Entity().withIdPattern(deviceId).withType("IoTDevice");
         List<Entity> entities = new ArrayList<>();
         entities.add(entity);
         Condition condition = new Condition().withAttrs(Arrays.asList("location"));
@@ -150,7 +146,10 @@ public class FiwareService {
         Notification notification = new Notification().withHttpCustom(httpCustom);
         Calendar time = Calendar.getInstance();
         time.add(Calendar.MINUTE, 5);
-        String expires = new SimpleDateFormat("yyy-MM-dd'T'hh:mm:ss'Z'").format(time.getTime());
+        TimeZone tz = TimeZone.getTimeZone("UTC");
+        DateFormat df = new SimpleDateFormat("yyy-MM-dd'T'hh:mm:ss'Z'");
+        df.setTimeZone(tz);
+        String expires = df.format(time.getTime());
         SubscribeToChanges dto = new SubscribeToChanges()
             .withDescription("Notify me of all IoTDevice state changes")
             .withSubject(subject)
@@ -158,7 +157,8 @@ public class FiwareService {
             .withExpires(expires);
 
         URI uri = new URI(OrionURL + "/v2/subscriptions");
-        restTemplate.postForEntity(uri, dto, SubscribeToChanges.class);
+        HttpEntity<SubscribeToChanges> requestEntity = new HttpEntity<>(dto, requestHeaders);
+        restTemplate.postForEntity(uri, requestEntity, SubscribeToChanges.class);
     }
 
     private String authenticateForOrion() {
@@ -176,11 +176,8 @@ public class FiwareService {
         return response.getBody().getAccessToken();
     }
 
-    private void provisionServiceGroup(String apiKey) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.set("fiware-service", "openiot");
-        headers.set("fiware-servicepath", "/");
+    public void provisionServiceGroup(String apiKey) {
+        HttpHeaders headers = getIoTServiceHeaders();
         com.ahmedmeid.fleet.service.dto.servicegroup.Service service = new com.ahmedmeid.fleet.service.dto.servicegroup.Service()
             .withApikey(apiKey)
             .withCbroker("http://orion:1026")
@@ -189,6 +186,15 @@ public class FiwareService {
         List<com.ahmedmeid.fleet.service.dto.servicegroup.Service> services = new ArrayList<>();
         services.add(service);
         ServiceGroup serviceGroup = new ServiceGroup().withServices(services);
-        restTemplate.postForEntity(IotAgentURL + "/iot/services", service, com.ahmedmeid.fleet.service.dto.servicegroup.Service.class);
+        HttpEntity<ServiceGroup> requestEntity = new HttpEntity<>(serviceGroup, headers);
+        restTemplate.postForEntity(IotAgentURL + "/iot/services", requestEntity, ServiceGroup.class);
+    }
+
+    private HttpHeaders getIoTServiceHeaders() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.set("fiware-service", "openiot");
+        headers.set("fiware-servicepath", "/");
+        return headers;
     }
 }
