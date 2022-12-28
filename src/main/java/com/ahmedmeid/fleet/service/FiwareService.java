@@ -86,7 +86,7 @@ public class FiwareService {
             .withRegNo(new RegNo().withType("Text").withValue(vehicle.getVehicleRegNo()));
 
         URI uri = new URI(OrionURL + "/v2/entities");
-        restTemplate.postForEntity(uri, dto, CreateEntity.class);
+        restTemplate.postForLocation(uri, dto);
     }
 
     /**
@@ -124,14 +124,14 @@ public class FiwareService {
         devices.add(device);
         ProvisionDevice dto = new ProvisionDevice().withDevices(devices);
         HttpEntity<ProvisionDevice> requestEntity = new HttpEntity<>(dto, headers);
-        restTemplate.postForEntity(uri, requestEntity, ProvisionDevice.class);
+        restTemplate.postForLocation(uri, requestEntity);
     }
 
     /**
      * Subscribe to changes of state for the IoT Device Entity
      * @throws URISyntaxException
      */
-    public void subscribeIoTDeviceChanges(String deviceId) throws URISyntaxException {
+    public URI subscribeIoTDeviceChanges(String deviceId) throws URISyntaxException {
         log.debug("subscribing to changes in the entities of IoTDevice");
         HttpHeaders requestHeaders = getIoTServiceHeaders();
         String token = authenticateForOrion();
@@ -147,7 +147,7 @@ public class FiwareService {
         Calendar time = Calendar.getInstance();
         time.add(Calendar.MINUTE, 5);
         TimeZone tz = TimeZone.getTimeZone("UTC");
-        DateFormat df = new SimpleDateFormat("yyy-MM-dd'T'hh:mm:ss'Z'");
+        DateFormat df = new SimpleDateFormat("yyy-MM-dd'T'HH:mm:ss'Z'");
         df.setTimeZone(tz);
         String expires = df.format(time.getTime());
         SubscribeToChanges dto = new SubscribeToChanges()
@@ -158,7 +158,7 @@ public class FiwareService {
 
         URI uri = new URI(OrionURL + "/v2/subscriptions");
         HttpEntity<SubscribeToChanges> requestEntity = new HttpEntity<>(dto, requestHeaders);
-        restTemplate.postForEntity(uri, requestEntity, SubscribeToChanges.class);
+        return restTemplate.postForLocation(uri, requestEntity);
     }
 
     private String authenticateForOrion() {
@@ -187,7 +187,7 @@ public class FiwareService {
         services.add(service);
         ServiceGroup serviceGroup = new ServiceGroup().withServices(services);
         HttpEntity<ServiceGroup> requestEntity = new HttpEntity<>(serviceGroup, headers);
-        restTemplate.postForEntity(IotAgentURL + "/iot/services", requestEntity, ServiceGroup.class);
+        restTemplate.postForLocation(IotAgentURL + "/iot/services", requestEntity);
     }
 
     private HttpHeaders getIoTServiceHeaders() {

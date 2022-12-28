@@ -6,6 +6,7 @@ import com.ahmedmeid.fleet.service.NotificationService;
 import java.net.URISyntaxException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -32,8 +33,8 @@ public class NotificationController {
     @PostMapping("/subscribe")
     @ResponseStatus(HttpStatus.CREATED)
     public Mono<ResponseEntity<Void>> subscribe(@RequestParam(name = "deviceId") String deviceId) throws URISyntaxException {
-        fiwareService.subscribeIoTDeviceChanges(deviceId);
-        return Mono.just(ResponseEntity.noContent().build());
+        var location = fiwareService.subscribeIoTDeviceChanges(deviceId);
+        return Mono.just(ResponseEntity.noContent().header("Location", location.toString()).build());
     }
 
     @PostMapping("/notification")
@@ -45,9 +46,9 @@ public class NotificationController {
     }
 
     @GetMapping(path = "/notification", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-    public Flux<ServerSentEvent<Object>> getNotifications() {
+    public Flux<ServerSentEvent<Object>> getNotifications(@RequestParam(name = "sub") String subscriptionId) {
         return Flux
-            .create(sink -> notificationService.subscribe(sink::next))
+            .create(sink -> notificationService.subscribe(subscriptionId, sink::next))
             .map(notification -> ServerSentEvent.builder().data(notification).event("notification").build());
     }
 }

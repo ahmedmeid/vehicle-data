@@ -5,5 +5,5 @@ export ORION_URL=http://ubuntu:1026
 export IOT_AGENT_URL=http://ubuntu:4041
 export NOTIFICATION_SERVICE_URL=http://192.168.148.1:8080/services/vehicledata/api/notification
 export ORION_CLIENT_ID=orion
-export ORION_CLIENT_SECRET=fGZR58i2vHF6FN55hliwkv7Icq4yntoD
+export ORION_CLIENT_SECRET=PU7w8ZUp9lT9j0gZ139AEUkRndEp21pE
 export KEYCLOAK_TOKEN_SERVICE=http://ubuntu:9080/realms/jhipster/protocol/openid-connect/token
