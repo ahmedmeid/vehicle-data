@@ -17,6 +17,8 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.function.Consumer;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -131,7 +133,7 @@ public class FiwareService {
      * Subscribe to changes of state for the IoT Device Entity
      * @throws URISyntaxException
      */
-    public URI subscribeIoTDeviceChanges(String deviceId) throws URISyntaxException {
+    public String subscribeIoTDeviceChanges(String deviceId) throws URISyntaxException {
         log.debug("subscribing to changes in the entities of IoTDevice");
         HttpHeaders requestHeaders = getIoTServiceHeaders();
         String token = authenticateForOrion();
@@ -158,7 +160,11 @@ public class FiwareService {
 
         URI uri = new URI(OrionURL + "/v2/subscriptions");
         HttpEntity<SubscribeToChanges> requestEntity = new HttpEntity<>(dto, requestHeaders);
-        return restTemplate.postForLocation(uri, requestEntity);
+        URI location = restTemplate.postForLocation(uri, requestEntity);
+        Pattern pattern = Pattern.compile("/v2/subscriptions/(.*)");
+        Matcher matcher = pattern.matcher(location.toString());
+        matcher.find();
+        return matcher.group(1);
     }
 
     private String authenticateForOrion() {

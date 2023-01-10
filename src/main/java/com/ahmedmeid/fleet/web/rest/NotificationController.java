@@ -3,7 +3,9 @@ package com.ahmedmeid.fleet.web.rest;
 import com.ahmedmeid.fleet.dto.Notification;
 import com.ahmedmeid.fleet.service.FiwareService;
 import com.ahmedmeid.fleet.service.NotificationService;
+import com.ahmedmeid.fleet.service.dto.subscription.Subscription;
 import java.net.URISyntaxException;
+import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
@@ -32,9 +34,10 @@ public class NotificationController {
 
     @PostMapping("/subscribe")
     @ResponseStatus(HttpStatus.CREATED)
-    public Mono<ResponseEntity<Void>> subscribe(@RequestParam(name = "deviceId") String deviceId) throws URISyntaxException {
+    public Mono<ResponseEntity<Subscription>> subscribe(@RequestParam(name = "deviceId") String deviceId) throws URISyntaxException {
         var location = fiwareService.subscribeIoTDeviceChanges(deviceId);
-        return Mono.just(ResponseEntity.noContent().header("Location", location.toString()).build());
+        Subscription subscription = Subscription.builder().subscriptionId(location).build();
+        return Mono.just(ResponseEntity.of(Optional.of(subscription)));
     }
 
     @PostMapping("/notification")
